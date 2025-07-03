@@ -17,10 +17,16 @@ const search = async ()=> {
    invoices.value = response.data.invoices
 }
 
+const createInvoice = async ()=>{
+    let form = await axios.get("/api/createInvoice")
+    console.log('form',form.data)
+}
+
 onMounted(() => {
     getInvoices();
 });
 </script>
+
 
 <template>
     <div class="container">
@@ -88,7 +94,7 @@ onMounted(() => {
                     <p v-if="item.customer">
                         {{item.customer.firstname}}
                     </p>
-                    <p v-else></p>
+                    <p v-else><!-- empty list --></p>
                     <p>{{item.due_date}}</p>
                     <p>${{item.total}}</p>
                 </div>
