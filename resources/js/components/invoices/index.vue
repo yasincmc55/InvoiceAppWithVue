@@ -1,6 +1,9 @@
 <script setup>
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
+import { useRouter} from "vue-router";
+
+const router = useRouter();
 
 let invoices = ref([]);
 let searchInvoice = ref([]);
@@ -18,11 +21,13 @@ const search = async ()=> {
 }
 
 const createInvoice = async ()=>{
-    let form = await axios.get("/api/createInvoice")
+    let form = await axios.get("/api/create-invoice")
     console.log('form',form.data)
+    router.push('/create-invoice')
 }
 
 onMounted(() => {
+    /*sayfa açılışında liste verilerinin gelmesi için otomatik tetikleme*/
     getInvoices();
 });
 </script>
@@ -38,7 +43,7 @@ onMounted(() => {
                     <h2 class="invoice__title">Invoices</h2>
                 </div>
                 <div>
-                    <a class="btn btn-secondary">
+                    <a class="btn btn-secondary" @click="createInvoice">
                         New Invoice
                     </a>
                 </div>

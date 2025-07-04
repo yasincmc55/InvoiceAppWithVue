@@ -17,7 +17,7 @@ class InvoiceController extends Controller
     }
 
     public function searchInvoice(Request $request)
-    { 
+    {
         $search = $request->get('s');
         if($search != null)
         {
@@ -39,7 +39,7 @@ class InvoiceController extends Controller
 
         if($invoice)
         {
-            $invoice = $invoice +1;
+            $invoice = $invoice->id +1;
             $counters = $counter->value + $invoice;
         }
         else
