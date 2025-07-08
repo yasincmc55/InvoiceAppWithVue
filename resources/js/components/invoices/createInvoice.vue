@@ -6,16 +6,28 @@ import { useRouter} from "vue-router";
 const router = useRouter();
 
 let form = ref([]);
+let allCustomers = ref([]);
+let customer_id = ref([]);
+let item = ref ([]);
+let listCart = ref([]);
+const showModal = ref(false);
+const hideModal = ref(true);
 
-const getDefaultInvoice = async () => {
-    let response = await axios.get('/api/get-blank-invoice');
-    //console.log('response', response);
-    //invoices.value = response.data.invoices
+
+const getIndexForm = async () => {
+    let response = await axios.get('/api/create-invoice');
+    form.value = response.data;
 };
+
+const getAllCustomers = async ()=>{
+    let response = await  axios.get('/api/get-all-customers');
+    allCustomers.value = response.data.customers;
+}
 
 
 onMounted(() => {
-    getInvoices();
+    getIndexForm();
+    getAllCustomers();
 });
 </script>
 
@@ -37,19 +49,20 @@ onMounted(() => {
                 <div class="card__content--header">
                     <div>
                         <p class="my-1">Customer</p>
-                        <select name="" id="" class="input">
-                            <option value="">cust 1</option>
+                        <select name="" id="" class="input" v-model="customer_id">
+                            <option disabled>Select Customer</option>
+                            <option :value="customer.id" v-for="customer in allCustomers" :key="customer.id">  {{customer.firstname}} </option>
                         </select>
                     </div>
                     <div>
                         <p class="my-1">Date</p>
-                        <input id="date" placeholder="dd-mm-yyyy" type="date" class="input"> <!---->
+                        <input id="date" placeholder="dd-mm-yyyy" type="date" class="input" v-model="form.date" > <!---->
                         <p class="my-1">Due Date</p>
-                        <input id="due_date" type="date" class="input">
+                        <input id="due_date" type="date" class="input" v-model="form.due_date">
                     </div>
                     <div>
                         <p class="my-1">Numero</p>
-                        <input type="text" class="input">
+                        <input type="text" class="input" v-model="form.number">
                         <p class="my-1">Reference(Optional)</p>
                         <input type="text" class="input">
                     </div>
@@ -119,6 +132,29 @@ onMounted(() => {
                     </a>
                 </div>
             </div>
+
+            <div class="modal main__modal ">
+                <div class="modal__content">
+                    <span class="modal__close btn__close--modal">×</span>
+                    <h3 class="modal__title">Add Item</h3>
+                    <hr><br>
+                    <div class="modal__items">
+                        <select class="input my-1">
+                            <option value="None">None</option>
+                            <option value="None">LBC Padala</option>
+                        </select>
+                    </div>
+                    <br><hr>
+                    <div class="model__footer">
+                        <button class="btn btn-light mr-2 btn__close--modal">
+                            Cancel
+                        </button>
+                        <button class="btn btn-light btn__close--modal ">Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <br><br><br>
 
         </div>
     </div>

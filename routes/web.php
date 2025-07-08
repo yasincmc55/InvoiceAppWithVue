@@ -17,6 +17,7 @@ Route::get('/', function () {
     return view('home');
 });
 
+//vue router
 Route::get('/(any)',function(){
     return view('home');
 })->where('(any)',".*");
