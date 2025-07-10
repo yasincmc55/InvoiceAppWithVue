@@ -25,7 +25,7 @@ class InvoiceController extends Controller
             return response()->json([
                 'invoices'=>$invoices
             ],200);
-        }else{
+        }else{ 
             return $this->getAllInvoice();
         }
     }
