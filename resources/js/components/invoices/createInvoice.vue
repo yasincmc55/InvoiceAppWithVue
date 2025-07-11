@@ -34,6 +34,7 @@ const addCart = (item) => {
         quantity : item.quantity
     }
     listCart.value.push(itemcart)
+    closeModal()
 }
 
 const openModal = ()=>{
@@ -44,13 +45,19 @@ const closeModal = ()=>{
 }
 
 const getProducts = async ()=>{
-    
+    let response = await axios.get('/api/products');
+    listproducts.value = response.data.products;
+}
+
+const removeItem = (i) => {
+    listCart.value.splice(i,1);
 }
 
 
 onMounted(() => {
     getIndexForm();
     getAllCustomers();
+    getProducts();
 });
 </script>
 
@@ -74,15 +81,15 @@ onMounted(() => {
                         <p class="my-1">Customer</p>
                         <select name="" id="" class="input" v-model="customer_id">
                             <option disabled>Select Customer</option>
-                            <option :value="customer.id" v-for="customer in allCustomers" :key="customer.id">  
-                                {{customer.firstname}} 
+                            <option :value="customer.id" v-for="customer in allCustomers" :key="customer.id">
+                                {{customer.firstname}}
                             </option>
                         </select>
                     </div>
                     <div>
                         <p class="my-1">Date</p>
                         <input id="date" placeholder="dd-mm-yyyy" type="date" class="input" v-model="form.date" > <!---->
-                        <p class="my-1">Due Date</p> 
+                        <p class="my-1">Due Date</p>
                         <input id="due_date" type="date" class="input" v-model="form.due_date">
                     </div>
                     <div>
@@ -98,7 +105,7 @@ onMounted(() => {
                     <div class="table--heading2">
                         <p>Item Description</p>
                         <p>Unit Price</p>
-                        <p>Qty</p> 
+                        <p>Qty</p>
                         <p>Total</p>
                         <p></p>
                     </div>
@@ -117,7 +124,7 @@ onMounted(() => {
                         </p>
                         <p v-else> </p>
 
-                        <p style="color: red; font-size: 24px;cursor: pointer;">
+                        <p style="color: red; font-size: 24px;cursor: pointer;" @click="removeItem(i)">
                             &times;
                         </p>
                     </div>
@@ -168,10 +175,16 @@ onMounted(() => {
                     <h3 class="modal__title">Add Item</h3>
                     <hr><br>
                     <div class="modal__items">
-                        <select class="input my-1">
-                            <option value="None">None</option>
-                            <option value="None">LBC Padala</option>
-                        </select>
+                        <ul style="list-style: none">
+                            <li v-for="(item,i) in listproducts" :key="item.id" style="display: grid; grid-template-columns:30px 350px 15px; align-items: center; padding-bottom:5px" >
+                                <p>{{i+1}}</p>
+                                <a href="#">{{item.item_code}} {{item.description}}</a>
+                                <button @click="addCart(item)" style="border:1px solid #e0e0e0; width: 35px; height:35px; cursor:pointer">
+                                    +
+                                </button>
+                            </li>
+                        </ul>
+
                     </div>
                     <br><hr>
                     <div class="model__footer">

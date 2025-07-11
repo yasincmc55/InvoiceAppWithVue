@@ -9,7 +9,7 @@ use App\Models\Customer;
 class CustomerController extends Controller
 {
     public function getAllCustomers():JsonResponse{
-        $customers = Customer::orderBy('id','DESC');
+        $customers = Customer::orderBy('id','DESC')->get();
         return response()->json([
             'customers'=>$customers
         ],200);
